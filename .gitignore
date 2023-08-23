@@ -4,3 +4,5 @@ logs/
 output/
 outputs/
 .idea/
+model/
+vocab/
