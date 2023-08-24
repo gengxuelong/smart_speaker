@@ -23,7 +23,7 @@ def train_seq2seq(net, tokenizer: CpmTokenizer, data_iter, lr, num_epochs, devic
     net.train()
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
     loss = get_loss()
-    animator = utils_func.Animator()
+    # animator = utils_func.Animator()
     timer = utils_func.Timer()
     logger = utils_func.get_logger()
     logger.info("start training......")
@@ -45,7 +45,8 @@ def train_seq2seq(net, tokenizer: CpmTokenizer, data_iter, lr, num_epochs, devic
                 metric.add(l.sum(), num_tokens)
         if (epoch + 1) % 10 == 0:
             logger(f'epoch:{epoch} loss: {metric[0] / metric[1]:.3f}')
-            animator.add_dynamic(epoch + 1, (metric[0] / metric[1]))
+            torch.save(net.state_dict(), f'gxl_model/model_params_{epoch}.pth')
+            # animator.add_dynamic(epoch + 1, (metric[0] / metric[1]))
     logger(f'loss {metric[0] / metric[1]:.3f}, {metric[1] / timer.stop():.1f} 'f'tokens/sec on {str(device)}')
 
 
@@ -53,4 +54,4 @@ if __name__ == '__main__':
     """"""
     big_model = get_big_model()
     _, tokenizer = get_chat_model_tokenizer()
-    train_seq2seq(big_model, tokenizer, get_iter(), 0.001, 50, torch.device('cpu'))
+    train_seq2seq(big_model, tokenizer, get_iter(), 0.001, 500, torch.device('cuda:1'))

@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 
-from chatbot_pytorch.utils_func import sequence_mask
+from utils_func import sequence_mask
 from model_store import get_chat_model_tokenizer
 from torch.utils.data import DataLoader, Dataset
 
@@ -61,7 +61,7 @@ class ChatDataset(Dataset):
         return len(self.ask_list)
 
 
-def get_iter(batch_size=16):
+def get_iter(batch_size=64):
     ask_tokens_list, ask_len_list, reply_tokens_list, reply_len_list = load_data_from_disk()
     return DataLoader(ChatDataset(ask_tokens_list, ask_len_list, reply_tokens_list, reply_len_list),
                       batch_size=batch_size, shuffle=True)

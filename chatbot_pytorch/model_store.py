@@ -195,7 +195,7 @@ class Seq2SeqAttentionDecoder(AttentionDecoder):
             # 在特征维度上连结
             x = torch.cat((context, torch.unsqueeze(x, dim=1)), dim=-1)
             # 将x变形为(1,batch_size,embed_size+num_hiddens)
-            out, hidden_state = self.rnn(x.permute(1, 0, 2), hidden_state)
+            out, hidden_state = self.rnn(x.permute(1, 0, 2), hidden_state.contiguous())
             outputs.append(out)
             self._attention_weights.append(self.attention.attention_weights)
         # 全连接层变换后，outputs的形状为
